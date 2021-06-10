@@ -1,0 +1,159 @@
+<body class="hold-transition sidebar-mini layout-fixed accent-navy">
+    <div class="wrapper">
+        <nav class="main-header navbar navbar-expand" [ngClass]="{'navVenta': vR == 'ROLE_ADMIN_NAIB' || 'ROLE_NAIB'}">
+            <ul class="navbar-nav">
+                <li>
+                    <div class="nav-link" data-widget="pushmenu" [ngClass]="{'text-white': vR == 'ROLE_ADMIN_NAIB' || 'ROLE_NAIB'}">
+                        <i class="fas fa-bars"></i>
+                    </div>
+                </li>
+                <li class="nav-link text-white" [ngClass]="{'text-white': vR == 'ROLE_ADMIN_NAIB' || 'ROLE_NAIB'}">
+                    {{nombrePantalla.toUpperCase()}}
+
+                </li>
+            </ul>
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                  <a class="nav-link text-white" style="font-size: 20px;">
+                    <b>{{nombreEvento}}</b>
+                  </a>
+                </li>
+              </ul>
+        </nav>
+
+
+        <aside class="main-sidebar elevation-4 sidebar-light-lightblue">
+            <a class="brand-link" [ngClass]="{'navVenta': vR == 'ROLE_ADMIN_NAIB' || 'ROLE_NAIB'}">
+                <img src="./assets/img_project/logo_light.png" alt="Naib" class="brand-image" *ngIf="vR == 'ROLE_ADMIN_NAIB' || 'ROLE_NAIB'">
+
+                <span class="brand-text" [ngClass]="{'text-white': vR == 'ROLE_ADMIN_NAIB' || 'ROLE_NAIB'}">Naib Group</span>
+            </a>
+
+
+            <div class="sidebar">
+
+                <nav class="mt-2">
+                    <ul class="nav nav-pills nav-sidebar flex-column nav-flat" data-widget="treeview" role="menu" data-accordion="false">
+                        <li class="nav-item has-treeview menu-close">
+                            <a class="nav-link puntero"><img src="./assets/img_project/logos_expositores/nouser.png" style="width:40px;" class="img-circle elevation-2" alt="imgProfile">
+                                <p class="ml-4">
+                                    {{dataUser.nombre}} {{dataUser.aPaterno}}<i class="right fas fa-angle-left mt-1"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item text-left">
+                                    <a class="nav-link">
+                                        <i class="fas fa-user-friends pr-1"></i>
+                                        <p>
+                                            <span [ngSwitch]="vR">
+
+                                                <font style="vertical-align: inherit; opacity:.8;" *ngSwitchCase="'ROLE_ADMIN_NAIB'">Admin Ventas</font>
+                                                <font style="vertical-align: inherit; opacity:.8;" *ngSwitchCase="'ROLE_NAIB'">Ventas</font>
+                                            </span>
+
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item text-left">
+                                    <a class="nav-link">
+                                        <i class="fas fa-phone pr-1"></i>
+                                        <p>
+                                            <font style="vertical-align: inherit; opacity:.8;">{{dataUser.telefono}}
+                                            </font>
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item text-left">
+                                    <a class="nav-link">
+                                        <i class="fas fa-envelope pr-1"></i>
+                                        <p>
+                                            <font style="vertical-align: inherit; opacity:.8;">{{dataUser.email}}</font>
+                                        </p>
+                                    </a>
+                                </li>
+                            </ul>
+                            <hr class="mt-0">
+                        </li>
+
+
+                        <li class="nav-item text-center" *ngIf="vR == 'ROLE_ADMIN_NAIB' || vR == 'ROLE_NAIB'">
+                            <mat-form-field floatLabel="never" style="width: 90%">
+                                <mat-label>Selecciona un evento</mat-label>
+                                <select matNativeControl (change)="mandarValor($event)" [(ngModel)]="idEventoSeleccionado">
+                                    <option value="0">Selecciona</option>
+                                    <option *ngFor="let evento of eventoEV" [value]="evento.evento.id">
+                                        {{evento.evento.nombre}}
+                                    </option>
+                                </select>
+                            </mat-form-field>
+                        </li>
+
+                        <li class="nav-item" *ngIf="vR == 'ROLE_ADMIN_NAIB'  || vR == 'ROLE_NAIB'">
+                            <a class="nav-link" [routerLink]="['/ventasProspectos']" routerLinkActive="active">
+                                <i class="nav-icon fas fa-address-book"></i>
+                                <p>
+                                    Mi cartera
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item" *ngIf="vR == 'ROLE_ADMIN_NAIB'  || vR == 'ROLE_NAIB'">
+                            <a class="nav-link" [routerLink]="['/ventasCalendario']" routerLinkActive="active">
+                                <i class="nav-icon  fas fa-calendar-alt"></i>
+                                <p>
+                                    Mi calendario
+                                </p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item" *ngIf="vR == 'ROLE_ADMIN_NAIB' || vR == 'ROLE_NAIB'">
+                            <a class="nav-link" [routerLink]="['/EmailMasivos']" routerLinkActive="active">
+                                <i class="nav-icon  fas fa-envelope-open-text"></i>
+                                <p>
+                                    Email Masivos
+                                </p>
+                            </a>
+                        </li>
+                        <!-- 
+                        <li class="nav-item" *ngIf="vR == 'ROLE_ADMIN_NAIB'">
+                            <a class="nav-link" [routerLink]="['/crearEvento']" routerLinkActive="active">
+                                <i class="nav-icon fas fa-city"></i>
+                                <p>
+                                    Crear evento
+                                </p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item" *ngIf="vR == 'ROLE_ADMIN_NAIB'">
+                            <a class="nav-link" [routerLink]="['/crearUsuario']" routerLinkActive="active">
+                                <i class="nav-icon fas fa-users"></i>
+                                <p>
+                                    Crear usuario
+                                </p>
+                            </a>
+                        </li>-->
+                    </ul>
+                </nav>
+
+                <hr />
+                <ul class="nav nav-pills nav-sidebar flex-column bottomLogout" data-widget="treeview" role="menu" data-accordion="false">
+                    <li class="nav-item">
+                        <a class="nav-link puntero" (click)="logout()">
+                            <i class="nav-icon fas fa-door-open"></i>
+                            <p>
+                                Cerrar sesión
+                            </p>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </aside>
+
+        <aside class="control-sidebar control-sidebar-dark">
+        </aside>
+    </div>
+
+    <div class="content-wrapper" style="display: none;"></div>
+    <ngx-spinner bdColor="rgba(0,0,0,0.7)" size="medium" color="#0d245e" type="ball-atom" [fullScreen]="true">
+        <p style="color: white"> Cerrando sesión... </p>
+    </ngx-spinner>
+</body>

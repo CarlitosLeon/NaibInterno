@@ -1,0 +1,195 @@
+.btn-circle {
+    width: 20px;
+    height: 20px;
+    padding: 3px 0px;
+    border-radius: 10px;
+    text-align: center;
+    font-size: 8px;
+    line-height: 1.42857;
+}
+
+label:first-child input[type=radio] {
+  width: 25px;
+  height: 25px;
+}
+
+.radius{
+  border-radius: 50%; 
+  font-size: 10px; 
+  line-height: 20px; 
+  text-align: center; 
+  top: 0;
+   width: 20px;
+
+}
+
+.scrolTareas {
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 400px;
+}
+
+
+.scrolcard {
+  overflow-y: hidden;
+  overflow-x: auto;
+}
+ .box{
+  width: 400px;
+ }
+.example-full-width {
+    width: 100%;
+  }
+
+.callout-dark {
+  border-left-color: #000;
+}
+
+.radio-lg {
+  width: 15px; 
+  height: 15px;  
+  transform: scale(1.5);
+
+}
+.circle30{
+  border-radius: 50%; 
+  font-size: 15px; 
+  line-height: 30px; 
+  text-align: center; 
+  top: 0; 
+  width: 30px;
+}
+.example-action-buttons {
+    padding-bottom: 20px;
+  }
+  
+  .example-headers-align .mat-expansion-panel-header-title,
+  .example-headers-align .mat-expansion-panel-header-description {
+    flex-basis: 0;
+  }
+  
+  .example-headers-align .mat-expansion-panel-header-description {
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .example-headers-align .mat-form-field + .mat-form-field {
+    margin-left: 8px;
+  }
+
+  .scrollerOsqi03 {
+    overflow-y: auto;
+    overflow-x: hidden;
+    max-height: 150px;
+}
+
+.text-wine{
+  color:#5D0210;
+}
+
+.hoverBtnEx:hover {
+  color:#5D0210;
+}
+
+.imgNuevaTarea{
+  max-width: 75px;
+  max-height: 75px;
+}
+
+.borderImg{
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  border: #CBCBCB;
+  background-color: #F3F3F3;
+  border-width: 1px;
+  border-style: solid;
+  width: 80px;
+  height: 80px;
+}
+
+
+.imgContainerModal{
+  display: flex;
+  max-height: 100px;
+  width: 100%;
+  overflow-x:auto;
+  overflow-y:auto;
+}
+
+.imgModalTarea{
+  max-width: 126px;
+  max-height: 126px;
+}
+
+.borderImgToModal{
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  border: #CBCBCB;
+  background-color: #F3F3F3;
+  border-width: 1px;
+  border-style: solid;
+  width: 130px;
+  height: 130px; 
+}
+
+.imgContainerModalInfo{
+  display: flex;
+  align-items: center;
+  max-height: 215px;
+  width: 100%;
+  overflow-x:auto;
+  overflow-y:auto;
+}
+
+.suspensivos{
+  width: 100px;
+  max-width: 140px;
+  text-overflow:ellipsis;
+  white-space:nowrap; 
+  overflow:hidden; 
+}
+
+.fondo {
+  background-image: url("src/assets/sms/img/whats2.jpeg");
+  background-repeat: no-repeat;
+  background-size: cover;
+
+}
+
+.message-body {
+  width: auto;
+  height: auto;
+}
+.message-main-sender {
+  padding: 3px 20px !important;
+  margin-left: 20% !important;
+  max-width: 80%;
+}
+
+.sender {
+  width: auto !important;
+  background: #dcf8c6;
+  border-radius: 5px 5px 0 10px;
+  padding: 4px 10px 7px !important;
+  display: inline-block;  
+}
+
+.message-text {
+  margin: 0 !important;
+  padding: 5px !important;
+  padding-bottom: 0 !important;
+}
+
+.sinborde{
+outline: none;
+}
+
+.border-SinEvento{
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  width: 95%;
+  height: 80%; 
+}

@@ -1,0 +1,407 @@
+<app-menu-fm></app-menu-fm>
+    
+    <div class="wrapper">
+        <form [formGroup]="formemailM">        
+        <div class="content-wrapper ">
+            <div class="card" *ngIf="idEventoSelected && idEventoSelected != 0">
+                <div class="card-body">
+                   
+                        
+                            <div class="row col-lg-12">
+                                <div class="col-lg-3 text-center">
+                                    <form [formGroup]="vaPais">
+                                    <div class="row col-lg-12" style="font-size: 12px;">
+                                        
+                                        <div class=" col-lg-6">
+                                            <mat-form-field class="anchoP">
+                                                <mat-label style="font-size: 11px;">Busca por país</mat-label>
+                                                <mat-select formControlName="valPais" (selectionChange)="paises($event.value)"  style="font-size: 12px;">
+                                                  <mat-option selected [value]=0>Todos</mat-option>
+                                                  <mat-option *ngFor="let pais of misPaisesC" [value]="pais">{{pais}}</mat-option>
+                                                </mat-select>
+                                            </mat-form-field>
+                                        </div>
+                                        <div class=" col-lg-6">
+                                            <mat-form-field class="anchoP">
+                                                <mat-label style="font-size: 11px;">Busca por estado</mat-label>
+                                                <mat-select formControlName="valEstado" (selectionChange)="estados($event.value)"  style="font-size: 12px;">
+                                                    <mat-option selected [value]=0>Todos</mat-option>
+                                                  <mat-option *ngFor="let estados of misEstadosCP" [value]="estados">{{estados}}</mat-option>
+                                                </mat-select>
+                                            </mat-form-field>
+                                        </div> 
+                                        
+                                    </div>
+                                </form>  
+                                    <div style="font-size: 12px;">
+                                        <mat-form-field class="example-form-field anchoP" >
+                                            <input (input)="searchContact($event.target.value)" matInput placeholder="Busca un contacto">
+                                            <mat-icon  matSuffix>search</mat-icon>
+                                        </mat-form-field>
+                                    </div>
+                                    <div  *ngIf="!dataContacto.length"class="table-responsive table-responsive-lg table-responsive-md table-responsive-sm scrollerOsqiP" >
+                                        <table class="table table-warning table-hover table-sm small text-center" style="font-size: 10px;">
+                                           <tbody>                                              
+                                                <tr>                                                   
+                                                    <th style="text-align:center">Sin Correos Registrados.</th>
+                                                </tr>
+                                            </tbody>
+                                        </table>        
+                                    </div>
+                      <!--Correos v1-->
+               
+                   
+                               <!--Ver Todos los correos-->
+                                    <ng-container>
+                                    <div  *ngIf="dataContacto.length"class="table-responsive table-responsive-lg table-responsive-md table-responsive-sm scrollerOsqiP" >
+                                        <table class="table table-bordered table-hover table-sm small text-center" style="font-size: 10px;">
+                                            <thead style="background-color: #4385ef;" class="text-white">
+                                                <tr>
+                                                    <td style="width: 50px;">
+                                                        <mat-checkbox
+                                                        [checked]="eCheckedAll()"
+                                                        (change)="seleccionartodoEmail($event)">
+                                                    </mat-checkbox>
+                                                    </td>
+                                                    <td>Contactos</td>
+                                                    <td>Correo</td>
+                                                </tr>
+                                            </thead>
+                                            <ng-container *ngIf="!dataContacto.length">
+                                              <h1>vacio</h1>
+                                            </ng-container>                                          
+                                            <tbody *ngFor="let item of dataContacto" >                                              
+                                                <tr>
+                                                    <th><mat-checkbox [checked]="item.checked" (change)="getEmailId($event,item)" ></mat-checkbox></th>
+                                                    <th>{{item.nombre}}</th>
+                                                    <th>{{item.email}}</th>
+                                                </tr>
+                                            </tbody>
+                                        </table>        
+                                    </div>
+                                </ng-container>
+                                </div>
+                                <div class="col-lg-9">
+                                    <div class="row col-lg-12 text-center">
+                                        <div class="col-lg-6">
+                                            <mat-form-field class=" anchoP" style="font-size: 12px;">
+                                                <mat-label>Asunto:</mat-label>
+                                                <input formControlName="asunto" matInput>
+                                            </mat-form-field> 
+                                        </div>
+                                        <!--<div class="col-lg-6">
+                                            <mat-form-field class=" anchoP" style="font-size: 12px;">
+                                                <mat-label>CC:</mat-label>
+                                                <input matInput>
+                                            </mat-form-field> 
+                                        </div>-->
+                                    </div>
+                                    <div class="row col-lg-12 ">
+                                        <div class="col-lg-2 mb-auto mt-auto">
+                                            <div class="uploadP  btn-xsP elevation-1 btnresponsive">
+                                                <input (change)="saveArchivos($event.target.files)" id="ArchivoEmail" type="file" class="subirP" >
+                                                <i class="fas fa-paperclip"></i> Adjuntar archivo
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-9 mb-auto mt-auto">
+                                            <div class="scrollhor">
+                                                <div *ngFor="let aFirma of archivosFirma; let i = index"
+                                                class="contenedor">
+                                                <ng-container *ngIf="archivosFirma.length">
+                                                
+                                                <div *ngIf="aFirma.tipoAr == '.docx' || aFirma.tipoAr == '.doc' || aFirma.tipoAr == '.txt' "
+                                                    class="info-box bg-blue adjunto">
+                                                    <span class="info-box-icon"><i
+                                                            class="fas fa-file-pdf"></i></span>
+                                                    <div class="mb-auto mt-auto Contenedor"
+                                                        style="font-size: 12px;">
+                                                        <b>{{aFirma.name}}</b>
+                                                    </div>
+                                                    <div class="mb-auto mt-auto  btn text-white">
+                                                        <i (click)="deleteArchivo(i)"
+                                                            class="fas fa-trash "
+                                                            style="font-size: 11px;"></i>
+                                                    </div>
+                                                </div>
+
+                                                <div *ngIf="aFirma.tipoAr == '.pdf'"
+                                                    class="info-box bg-red adjunto">
+                                                    <span class="info-box-icon"><i
+                                                            class="fas fa-file-pdf"></i></span>
+                                                    <div class="mb-auto mt-auto Contenedor"
+                                                        style="font-size: 12px;">
+                                                        <b>{{aFirma.name}}</b>
+                                                    </div>
+                                                    <div class="mb-auto mt-auto  btn text-white">
+                                                        <i (click)="deleteArchivo(i)"
+                                                            class="fas fa-trash "
+                                                            style="font-size: 11px;"></i>
+                                                    </div>
+                                                </div>
+
+                                                <div *ngIf="aFirma.tipoAr == '.xlsx' || aFirma.tipoAr == '.xls'  "
+                                                    class="info-box bg-green adjunto">
+                                                    <span class="info-box-icon"><i
+                                                            class="fas fa-file-excel"></i></span>
+                                                    <div class="mb-auto mt-auto Contenedor"
+                                                        style="font-size: 12px;">
+                                                        <b>{{aFirma.name}}</b>
+                                                    </div>
+                                                    <div class="mb-auto mt-auto btn text-white">
+                                                        <i (click)="deleteArchivo(i)"
+                                                            class="fas fa-trash"
+                                                            style="font-size: 11px;"></i>
+                                                    </div>
+                                                </div>
+
+                                                <div *ngIf="aFirma.tipoAr == '.pptx' || aFirma.tipoAr == '.ppsx' || aFirma.tipoAr == '.pps'"
+                                                    class="info-box bg-orange adjunto">
+                                                    <span class="info-box-icon"><i
+                                                            class="fas fa-file-powerpoint"></i></span>
+                                                    <div class="mb-auto mt-auto Contenedor"
+                                                        style="font-size: 12px;">
+                                                        <b>{{aFirma.name}}</b>
+                                                    </div>
+                                                    <div class="mb-auto mt-auto  btn">
+                                                        <i (click)="deleteArchivo(i)"
+                                                            class="fas fa-trash "
+                                                            style="font-size: 11px;"></i>
+                                                    </div>
+                                                </div>
+
+                                                <div *ngIf="aFirma.tipoAr == '.jpg' || aFirma.tipoAr == '.jpeg' || aFirma.tipoAr == '.svg' || aFirma.tipoAr == '.ico' || aFirma.tipoAr == '.gif' || aFirma.tipoAr == '.png'"
+                                                    class="info-box bg-light adjunto">
+                                                    <span class="info-box-icon"><i
+                                                            class="fas fa-file-image"></i></span>
+                                                    <div class="mb-auto mt-auto Contenedor"
+                                                        style="font-size: 12px;">
+                                                        <b>{{aFirma.name}}</b>
+                                                    </div>
+                                                    <div class="mb-auto mt-auto  btn">
+                                                        <i (click)="deleteArchivo(i)"
+                                                            class="fas fa-trash "
+                                                            style="font-size: 11px;"></i>
+                                                    </div>
+                                                </div>
+                                            </ng-container>
+                                            </div>
+                                        </div>
+                                        </div>
+                                    </div>
+                                      
+                                    <hr class="m-0">
+                                    <div class="mt-2">
+                                        <div 
+                                        formControlName="descripcion"
+                                        [ngxSummernote]="correo5" ></div>
+                                    </div>
+                                    <div class="row col-lg-12 text-center">
+                                        <div class="col-lg-2 mt-auto mb-auto">
+                                            <div class="accordion" id="accordionExample">
+                                                <div class="collapsed" data-toggle="collapse" data-target="#collapse" aria-expanded="false" aria-controls="collapse">
+                                                    <button class="btn btn-xsP btn-light elevation-1 btnresponsive" ><i class="fas fa-pen-alt"></i> Gestionar firmas</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 mb-auto mt-auto">
+                                            <mat-form-field class="anchoP">
+                                                <mat-label style="font-size: 12px;">Mis Firmas</mat-label>
+                                                <mat-select formControlName="firma" disableRipple style="font-size: 12px;">
+                                                  <mat-option [value]="firmasE.id" *ngFor="let firmasE of firmasEmail"> {{firmasE.nombre}} </mat-option>
+                                                </mat-select>
+                                            </mat-form-field>
+                                        </div>                                         
+                                        <div class="col-lg-5"></div>
+                                        <!--Loading-->
+                                        <div *ngIf="loadEmail" class="btn-group btnresponsive col-lg-2 mb-auto mt-auto" role="group" aria-label="Basic example">
+                                            <button  (click)="envioemailMasivo()" 
+                                            [disabled]="!formemailM.valid || valiarChe()" 
+                                            class="btn btn-xsP btn-primary ">
+                                            <i class="fas fa-paper-plane"></i> Enviar</button>
+                                            <!--Nuevas Lineas-->
+                                            <button (click)="program()" data-toggle="collapse" data-target="#Programado"
+                                            aria-expanded="false" aria-controls="collapse3"
+                                            type="button" class="btn btn-xs btn-warning"><i
+                                            class="fas fa-clock"></i></button>
+                                        </div>
+                                        <div *ngIf="!loadEmail" class="overlay" role="group" aria-label="Basic example">
+                                            <div class="spinner ">
+                                                <img src="../../../assets/sms/img/1488.gif"/>
+                                              </div>
+                                        </div>
+                                        <!--Loading-->
+                                    </div>
+                                    <div id="collapse" class="collapse col-lg-12" aria-labelledby="headingOne" data-parent="#accordionExample">
+                                        <div class="card bg-light">
+                                            <div class="card-body ">
+                                                <mat-tab-group mat-align-tabs="center" >
+                                                    <mat-tab >
+                                                        <ng-template mat-tab-label >
+                                                            <i class="fas fa-pen-alt iconTabP" style="font-size: 22px;"></i> Crear firma
+                                                        </ng-template>
+                                                        <form [formGroup]="formFirmas">
+                                                        <div class="row col-lg-12">
+                                                            <div class="col-lg-5">
+                                                                <mat-form-field class=" anchoP" style="font-size: 12px;">
+                                                                    <mat-label>Nombre de firma:</mat-label>
+                                                                    <input formControlName="nombre" matInput>
+                                                                </mat-form-field> 
+                                                            </div>
+                                                            <div class="col-lg-5"></div>
+
+                                                            <div class="col-lg-2 mb-auto mt-auto">
+                                                                <div class="uploadP  btn-xsP elevation-1 btnresponsive">
+                                                                    <input (change)="updateFirm($event)" type="file" id="Firmas" class="subirP" value="">
+                                                                    <i class="fas fa-paperclip"></i> Subir imagen
+                                                                </div>
+                                                                
+                                                            </div>
+                                                        </div>
+                                                        <div class="mt-2">
+                                                            <div class="mt-2">
+                                                                <div formControlName="descripcion" [ngxSummernote]="Firma" ></div>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                        <hr>
+                                                        <div class="float-right mt-auto mb-auto">
+                                                            <button [disabled]="!formFirmas.valid" (click)="saveFirm()" class="btn btn-xsP btn-primary btnresponsive">Guardar</button>
+                                                        </div>
+                                                    </mat-tab>
+                                                    <mat-tab >
+                                                        <ng-template mat-tab-label >
+                                                            <i class="fas fa-edit iconTabP" style="font-size: 22px;"></i> Editar firmas
+                                                        </ng-template>
+                                                        <form [formGroup]="updaFirma">
+                                                        <div class="row col-lg-12">
+                                                            <div class="col-lg-4"></div>
+                                                            <div class="col-lg-4">
+                                                                <mat-form-field class="anchoP">
+                                                                    <mat-label style="font-size: 12px;">Elige entre tus firmas</mat-label>
+                                                                    <mat-select formControlName="firma" (selectionChange)="editshowFirm($event.value)" disableRipple style="font-size: 12px;">
+                                                                        <mat-option *ngFor="let firmasE of firmasEmail" [value]="firmasE.id"> {{firmasE.nombre}} </mat-option>
+                                                                    </mat-select>
+                                                                </mat-form-field>
+                                                            </div>
+                                                            <div class="col-lg-2"></div>
+                                                            <div class="col-lg-2 mb-auto mt-auto">
+                                                                <div class="uploadP  btn-xsP elevation-1 btnresponsive">
+                                                                    <input (change)="updateFirm($event)" type="file" id="Firmas" class="subirP" value="">
+                                                                    <i class="fas fa-paperclip"></i> Subir imagen
+                                                                </div>
+                                                                
+                                                            </div>
+                                                        </div>
+                                                        <hr class="m-0">
+                                                       
+                                                        <div *ngIf="!btnActulizar">
+                                                            <label
+                                                            for="exampleInputEmail1">Asigna
+                                                            un nombre a la nueva
+                                                            firma</label>
+                                                        <input formControlName="nombre"
+                                                            type="text" class="form-control"
+                                                            [value]="nombreEditFirma">
+                                                        </div>
+                                                     
+                                                        <div class="mt-2">
+                                                            <div>                                                                
+                                                                <div formControlName="descripcion" [ngxSummernote]="correoEdit" >
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <hr>
+                                                        <div class="float-right mt-auto mb-auto">
+                                                            <button [disabled]="!updaFirma.valid" (click)="updateFirmas()" class="btn btn-xsP btn-primary btnresponsive">Actualizar</button>
+                                                        </div>
+                                                        <div *ngIf="!btnActulizar" class="card w-100 p-3">
+                                                            <div class="card-body">
+                                                                <div class="form-group">
+                                                                        <div *ngIf="nombreEditdescrip.length != 0" class="border p-3"
+                                                                        [ngxSummernoteView]="nombreEditdescrip">
+                                                                    </div>
+                                                                   <img *ngIf="ArchivoEdit.length !=0"
+                                                                    src="{{urlPdfs}}{{ArchivoEdit}}"
+                                                                    style="width:100%;
+                                                                    height:auto" class="card-img-top"
+                                                                    alt="{{ArchivoEdit | slice: 37}}">
+        
+                                                                </div>
+                                                            </div>
+                                                          </div>
+                                                     
+                                                        
+                                                      
+                                                    </form>
+                                                    </mat-tab>
+                                                </mat-tab-group>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div *ngIf="programScreen" id="Programado" class="collapse col-lg-12"
+                                    aria-labelledby="headingOne" data-parent="#accordionExample">
+                                    <form [formGroup]="formemailPro">
+                                        <div class="card bg-light">
+                                            <div class="card-body ">
+                                                <div class="textdecorE" style="font-size: 14px;">
+                                                    <b>Enviar para el día:</b></div>
+                                                <div class="mt-2">
+                                                    <div class="row col-lg-12">
+                                                        <div class="col-lg-6 mt-auto mb-auto">
+                                                            <input
+                                                                formControlName="fecha_programado" 
+                                                                class="form-control form-control-sm"
+                                                                type="date" id="start" name="trip-start"
+                                                                value="2020-07-22" min="{{validaDia}}"
+                                                                max="2022-12-31">
+                                                        </div>
+                                                        <div class="col-lg-6 mt-auto mb-auto">
+                                                            <div class="row col-lg-12 text-center">
+                                                                <div class="col-lg-6">
+                                                                    <select
+                                                                        formControlName="hora_programado"                                                                       
+                                                                        class="form-control form-control-sm">
+                                                                        <option value="Hora">Hora
+                                                                        </option>
+                                                                        <option [value]="Hrs"
+                                                                            *ngFor="let Hrs of listaHrs">
+                                                                            {{Hrs}}</option>
+                                                                    </select>
+                                                                </div>
+                                                                <div class="col-lg-6">
+                                                                    <select
+                                                                        formControlName="minuto_programado"                                                                        
+                                                                        class="form-control form-control-sm">
+                                                                        <option value="Minuto">Minuto
+                                                                        </option>
+                                                                        <option [value]="mtos"
+                                                                            *ngFor="let mtos of listaMnts">
+                                                                            {{mtos}}</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <hr>
+                                                <div class="float-right"><button
+                                                    (click)="horaPro()"
+                                                    [disabled]="formemailPro.invalid || formemailPro.controls['hora_programado'].value == 'Hora' || formemailPro.controls['minuto_programado'].value == 'Minuto' || valiarChe() "
+                                                        class="btn btn-xs btn-primary"
+                                                        style="width: 130px;">Programar</button></div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                </div>
+                            </div>
+                      
+
+                   
+                </div>
+            </div>
+        </div>
+    </form>
+    </div>
+
+

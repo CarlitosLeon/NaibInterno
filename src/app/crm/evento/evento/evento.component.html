@@ -1,0 +1,166 @@
+<app-menu-fm></app-menu-fm>
+
+
+<div class="wrapper">
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Aqui empiezas) -->
+        <div class="container">
+            <div class="pt-5">
+                <div class="row">
+                    <mat-vertical-stepper class="example-full-width " [linear]="isLinear" #stepper>
+                        <mat-step [stepControl]="firstFormGroup">
+                            <form [formGroup]="firstFormGroup">
+                                <ng-template matStepLabel> Crear Centro de Expocsiones</ng-template>
+                                <div class="row">
+                                    <div class="col-12">
+                                        <mat-form-field class="example-full-width ">
+                                            <mat-label>Nombre del Recinto </mat-label>
+                                            <input matInput>
+                                            <button class="btn" mat-icon-button matSuffix (click)="hide = !hide"
+                                                [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                                                <mat-icon>apartment</mat-icon>
+                                            </button>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-4">
+                                        <mat-form-field class="example-full-width ">
+                                            <mat-label>Ciudad</mat-label>
+                                            <input matInput>
+                                            <button class="btn" mat-icon-button matSuffix (click)="hide = !hide"
+                                                [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                                            </button>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-4">
+                                        <mat-form-field class="example-full-width ">
+                                            <mat-label>Av, Calle</mat-label>
+                                            <input matInput>
+                                            <button class="btn" mat-icon-button matSuffix (click)="hide = !hide"
+                                                [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                                            </button>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-4">
+                                        <mat-form-field class="example-full-width ">
+                                            <mat-label>Colonia</mat-label>
+                                            <input matInput>
+                                            <button class="btn" mat-icon-button matSuffix (click)="hide = !hide"
+                                                [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                                            </button>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-4">
+                                        <mat-form-field class="example-full-width ">
+                                            <mat-label>Municipio</mat-label>
+                                            <input matInput>
+                                            <button class="btn" mat-icon-button matSuffix (click)="hide = !hide"
+                                                [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                                            </button>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-4">
+                                        <mat-form-field class="example-full-width ">
+                                            <mat-label>Numero</mat-label>
+                                            <input matInput>
+                                            <button class="btn" mat-icon-button matSuffix (click)="hide = !hide"
+                                                [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                                            </button>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-4">
+                                        <mat-form-field class="example-full-width ">
+                                            <mat-label>C.P.</mat-label>
+                                            <input matInput>
+                                            <button class="btn" mat-icon-button matSuffix (click)="hide = !hide"
+                                                [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                                            </button>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-12">
+                                        <mat-form-field class="example-full-width ">
+                                            <mat-label>Link de la ubicación</mat-label>
+                                            <input matInput>
+                                            <button class="btn" mat-icon-button matSuffix (click)="hide = !hide"
+                                                [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                                                <mat-icon>location_on</mat-icon>
+                                            </button>
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div>
+                                    <button class="btn btn-light shadow mt-3" mat-button
+                                        matStepperNext>Siguiente</button>
+                                </div>
+                            </form>
+                        </mat-step>
+                        <mat-step [stepControl]="secondFormGroup">
+                            <form [formGroup]="secondFormGroup">
+                                <ng-template matStepLabel> Crear Evento</ng-template>
+                                <mat-form-field class="example-full-width ">
+                                    <mat-label>Nombre del evento </mat-label>
+                                    <input matInput>
+                                    <button class="btn" mat-icon-button matSuffix (click)="hide = !hide"
+                                        [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                                        <mat-icon>apartment</mat-icon>
+                                    </button>
+                                </mat-form-field>
+                                <div class="row  mt-3">
+                                    <div class="col-6 text-center mt-3">
+                                        <button type="button" class="btn btn-light btn-file border">
+                                            <input type="file" name="attachment">
+                                            <span class="material-icons">
+                                                camera_enhance
+                                            </span>
+                                        </button> <label class="ml-3 ">Subir logo</label>
+                                    </div>
+                                    <div class="col-6 text-center">
+                                        <img src="./assets/img_evento/ferretera.jpeg" class=" w-50" alt="imgProfile">
+                                    </div>
+                                </div>
+                                <div class="row mt-4">
+                                    <div class="col-12"><label><b>Fechas de montaje: </b> </label></div>
+                                    <div class="col-6 "> <span>Inicio:</span> <input
+                                            class="form-control form-control-sm " id="party" type="datetime-local"
+                                            name="partydate" value="2020-06-01T08:30"></div>
+                                    <div class="col-6 "> <span>Fin:</span> <input class="form-control form-control-sm "
+                                            id="party" type="datetime-local" name="partydate" value="2020-06-01T08:30">
+                                    </div>
+                                    <div class="col-12 mt-2"><label><b>Fechas del evento: </b> </label></div>
+                                    <div class="col-6 "> <span>Inicio:</span> <input
+                                            class="form-control form-control-sm " id="party" type="datetime-local"
+                                            name="partydate" value="2020-06-01T08:30"></div>
+                                    <div class="col-6 "> <span>Fin:</span> <input class="form-control form-control-sm "
+                                            id="party" type="datetime-local" name="partydate" value="2020-06-01T08:30">
+                                    </div>
+                                    <div class="col-12  mt-2"><label><b>Fechas de desmontaje: </b> </label></div>
+                                    <div class="col-6 "> <span>Inicio:</span><input
+                                            class="form-control form-control-sm " id="party" type="datetime-local"
+                                            name="partydate" value="2020-06-01T08:30"></div>
+                                    <div class="col-6 "> <span>Fin:</span> <input class="form-control form-control-sm "
+                                            id="party" type="datetime-local" name="partydate" value="2020-06-01T08:30">
+                                    </div>
+                                </div>
+                                <div class="mt-5">
+                                    <button class="btn btn-light mr-2" mat-button matStepperPrevious>Regresar</button>
+                                    <button class="btn btn-light shadow" mat-button matStepperNext>Guardar</button>
+                                </div>
+                            </form>
+                        </mat-step>
+                        <mat-step>
+                            <ng-template matStepLabel>Hecho</ng-template>
+                            <p class="text-success">Ya ha terminado! </p>
+                            <div class="col-12 text-center">
+                                <img src="./assets/img_evento/registrado.png" class="w-25 " alt="imgProfile">
+                            </div>
+                            <div>
+                                <button class="btn btn-light shadow" mat-button (click)="stepper.reset()">Nuevo</button>
+                            </div>
+                        </mat-step>
+                    </mat-vertical-stepper>
+                </div>
+            </div>
+        </div>
+    </div> <!-- /.content-wrapper -->
+</div> 

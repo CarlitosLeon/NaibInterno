@@ -1,0 +1,981 @@
+<app-menu-fm></app-menu-fm>
+<div class="wrapper" *ngIf="!eventoExist">
+    <div class="content-wrapper">
+        <div class="border-SinEvento ml-1 mr-1">
+            <img src='./assets/img_project/sin_evento_seleccionado.jpg'>
+        </div>
+        <div>
+            <img class="img-SinEvento" >
+        </div>
+    </div>
+</div>
+<div class="wrapper" *ngIf="eventoExist">
+    <ngx-spinner name="spinnerCalendarioCRM" bdColor = "rgba(0, 0, 0, 0.8)" size = "medium" color = "#fff" type = "cube-transition" [fullScreen] = "true">
+        <p style="color: white" > Cargando...</p>
+    </ngx-spinner>
+    <div class="content-wrapper">
+        <!-- Aqui empiezas) -->
+        <div class="container-fluid" style="height: 100%;">
+            <div class="row">
+                <div class="col-lg-8 col-md-6 col-sm-12 pt-2">
+                    <div class="card">
+                        <div class="card-header card-primary card-outline" >
+                            <full-calendar  [options]="calendarOptions"></full-calendar>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 col-sm-12 pt-2">
+                    <!--  <div>  BUSCARDOR 
+                                <mat-form-field class="example-full-width">
+                                  <mat-label>Buscar</mat-label>
+                                  <input type="" matInput placeholder="Ejemplo: Tarea, lista...">
+                                  <mat-icon matSuffix>search</mat-icon>
+                                </mat-form-field>
+                    </div>./BUSCARDOR -->
+                    <div class="row">
+                        <!-- CARDS DE HOY Y-->
+                        <div class="col-lg-6">
+                            <div class="info-box bg-white p-2">
+                                <div class="row w-100">
+                                    <div class="col-lg-8 ml-0 mt-auto mb-auto">
+                                        <span class="material-icons img-circle p-1"
+                                            style="background-color: #075DCE !important; color: #ffff">
+                                            today
+                                        </span>
+                                        <h4 class="text-secondary">Hoy</h4>
+                                    </div>
+                                    <div class="col-lg-4 mr-0 mt-auto mb-auto text-right">
+                                        <label class="text-xl">{{ eventosToday.length }}</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="info-box bg-white p-2">
+                                <div class="row w-100">
+                                    <div class="col-lg-8 ml-0 mt-auto mb-auto">
+                                        <span class="material-icons img-circle p-1"
+                                            style="background-color: #dc3545 !important; color: #ffff">
+                                            watch_later
+                                        </span>
+                                        <h4 class="text-secondary">Programados</h4>
+                                    </div>
+                                    <div class="col-lg-4 mr-0 mt-auto mb-auto text-right">
+                                        <label class="text-xl">{{listMensajesProgramados.lstEventoCalendario.length}}</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- ./CARDS DE HOY Y -->
+                    <div class="card bg-white p-3 scrolcard">
+                        <!--AGREGAR CLASE scrolcard -->
+                        <div class="row box">
+                            <!-- AGREGAR CLASE box -->
+                            <ng-container *ngFor="let item of listCalendario">
+                                <div *ngIf="item.eventosToday>0" class="img-circle mr-3" class="{{ item.bootstrapColor.class }}">
+                                    <mat-icon class="m-2" matBadge="{{ item.eventosToday }}" matBadgeColor="dan">
+                                        {{ item.icono }}</mat-icon>
+                                </div>
+                            </ng-container>
+                            <ng-container *ngIf="listMensajesProgramados.eventosToday>0">
+                                <div class="{{ listMensajesProgramados.bootstrapColor.class }} img-circle mr-3 float-right">
+                                    <i class="fab fa-whatsapp fa-2x m-2" matBadge="{{ listMensajesProgramados.eventosToday }}" matBadgeColor="dan"></i>
+                                </div>
+                            </ng-container>
+                            <ng-container *ngIf="eventosTodayEmpty && listMensajesProgramados.eventosToday==0">
+                                <span class="text-secondary">
+                                    No hay actividades programadas el dia de Hoy
+                                </span>
+                            </ng-container>
+                            <!---->
+                        </div>
+                    </div>
+
+                    <label><b>Mis listas</b></label>
+                    <div></div>
+                    <div class="card-header bg-white card-primary card-outline scrolTareas p-1" style="height: 54%">
+                        <div class="accordion" id="accordionExample">
+                            <ng-container *ngFor="let item of listCalendario">
+                                <div class="card-header" data-toggle="collapse" [attr.data-target]="'#collapse'+item.id" (contextmenu)="onRightClick($event, item)">
+                                    <div class="collapsed" type="button">
+                                        <span class=" float-left material-icons img-circle p-1 {{item.bootstrapColor.class}}">
+                                            {{item.icono}}
+                                        </span>
+                                        <label class="float-left mt-1 ml-1"> {{item.titulo}}<i *ngIf="item.timerLista!=0" class="fa fa-spinner fa-spin ml-2"></i></label>
+                                        <span class="float-right">{{item.lstEventoCalendario.length}} <i class="fas fa-angle-down right"></i></span>
+                                        <button type="button" class="btn float-right mr-3" data-toggle="dropdown"
+                                        aria-haspopup="true" aria-expanded="false">
+                                        <i class="fas fa-ellipsis-v"></i>
+                                        </button>
+                                        <div class="dropdown-menu">
+                                            <!-- Dropdown menu links -->
+                                            <button class="dropdown-item" data-toggle="modal"
+                                                data-target="#exampleModal" (click)="editarLista(item)"><i
+                                                    class="fas fa-edit text-{{item.bootstrapColor.name}}"></i>
+                                                Editar</button>
+                                            <button class="dropdown-item" (click)="deleteListaCalendario(item)"><i
+                                                    class="fas fa-trash-alt text-{{item.bootstrapColor.name}}"> </i>
+                                                Eliminar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                    <div id="collapse{{item.id}}" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+                                    <div class="card-body bg-light">
+                                        <ng-container *ngFor="let eve of item.lstEventoCalendario">
+                                            <div class="callout p-1" style="border-left-color: {{item.bootstrapColor.hexColor}}">
+                                                <div class="row">
+                                                    <div class="col-1 pt-2 radio-lg">
+                                                        <input class="ml-2" type="checkbox" (change)="cambioEstatusEvento(item,eve)" [(ngModel)]="eve.estatus" />
+                                                    </div>
+                                                    <div class="col-6" data-toggle="modal" (click)="selectEvento(item,eve)" data-target=".bd-example-modal-lg">
+                                                        <label class="ml-1"> {{eve.titulo}} </label>
+        
+                                                        <div class="text-gray" style="font-size: 10px;">
+                                                            <div class="suspensivos">
+                                                                <span class="ml-1">
+                                                                    {{eve.notas}}
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-5">
+                                                        <span class="float-right">
+                                                            <div class="btn-group dropright">
+                                                                <div class="text-gray" style="font-size: 9px">
+                                                                    <span>
+                                                                        <div>
+                                                                            <i class="fa fa-calendar"></i> {{ eve.hora | date:"dd/MM/yy" }}
+                                                                        </div>
+                                                                        <div><i class="fa fa-clock"></i> {{ eve.hora | date:"HH:mm" }}</div>
+                                                                    </span>
+                                                                </div>
+                                                                <button type="button" class="btn" data-toggle="dropdown"
+                                                                    aria-haspopup="true" aria-expanded="false">
+                                                                    <i class="fas fa-ellipsis-h"></i>
+                                                                </button>
+                                                                <div class="dropdown-menu">
+                                                                    <!-- Dropdown menu links -->
+                                                                    <button class="dropdown-item" data-toggle="modal"
+                                                                        data-target="#exampleModal3" (click)="RestartValuesTarea(item,eve)"><i
+                                                                            class="fas fa-edit text-primary"></i>
+                                                                        Editar</button>
+                                                                    <button class="dropdown-item" (click)="deleteEventoCalendario(item,eve)"><i
+                                                                            class="fas fa-trash-alt text-danger"> </i>
+                                                                        Eliminar</button>
+                                                                </div>
+                                                            </div>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </ng-container>
+                                        <div class="callout p-1" style="border-left-color: #fff" (click)="RestartValuesTarea(item,null)" data-toggle="modal" data-target="#modalTareaNueva">
+                                            <div class="row">
+                                                <div class=" text-right "><button type="button" class="btn btn-sm j"> 
+                                                    <i class="fas fa-plus-circle text-lg text-success"></i>
+                                                    <span class="font-italic" > Nueva tarea</span>
+                                                    </button> </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-container>
+                            <div>
+                                <div class="card-header" id="headingTwo">
+                                    <div class="collapsed" type="button">
+                                        <div class="float-left">
+                                            <i class="fa fa-plus-circle text-primary" aria-hidden="true"></i>
+                                            <button type="button" class="btn btn-sm" data-toggle="modal"
+                                                data-target="#exampleModal" (click)="restartValues()">
+                                                <span class="font-italic"> Nueva lista</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.card-header -->
+                </div>
+                <!-- /.col-5 -->
+            </div>
+            <!-- /.row -->
+        </div>
+        <!-- /.container -->
+    </div>
+    <!-- /.content-wrapper -->
+</div>
+
+<!--CONTEXT MENU-->
+<div style="visibility: hidden; position: fixed;" 
+[style.left]="menuTopLeftPosition.x" 
+[style.top]="menuTopLeftPosition.y" 
+[matMenuTriggerFor]="rightMenu"></div> 
+ 
+<!-- standard material menu --> 
+<mat-menu #rightMenu="matMenu" style=" outline: none;" yPosition="below"> 
+  <ng-template matMenuContent let-item="item"> 
+    <a mat-menu-item><mat-icon style="width:5px;  outline: none;" class="text-{{item.bootstrapColor.name}}">close</mat-icon> Cerrar</a>
+    <hr>
+    <a mat-menu-item (click)="editarLista(item)"> <mat-icon style="width:5px; " class="text-{{item.bootstrapColor.name}} sinborde">create</mat-icon> Editar</a> 
+    <a mat-menu-item (click)="deleteListaCalendario(item)"> <mat-icon style="width:5px;  outline: none;" class="text-{{item.bootstrapColor.name}}">delete</mat-icon> Eliminar</a> 
+     
+  </ng-template> 
+</mat-menu> 
+<!--CONTEXT MENU-->
+
+<!-- /.wrapper -->
+<!-- Modal crear lista-->
+<div class="modal fade" id="exampleModal" *ngIf="selectedColor" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-primary form-inline">
+                <div class="form-inline" style="font-size: 15px;"><i class="fa fa-list"></i>
+                    <b class="ml-2"> Nueva lista</b>
+                </div>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+            </div>
+            <div class="modal-body">
+                <div class="pl-2 pr-2">
+                    <div class="text-center mb-2" type="button">
+                        <span class="material-icons text-xl {{selectedColor.class}}" style="border-radius: 50%; font-size: 20px; line-height: 50px; text-align: center; top: 0; width: 50px;">
+                            {{selectedIcon.icon}}</span>
+                        <span class="float-right"></span>
+                    </div>
+                    <mat-form-field class="example-full-width" appearance="">
+                        <mat-label>Titulo de la lista</mat-label>
+                        <input matInput [(ngModel)]="tituloLista" />
+                    </mat-form-field>
+                    <label>Seleccione un color: </label>
+                    <!--COLORES-->
+                    <div class="btn-group" style="width: 100%; margin-bottom: 2px">
+                        <ul class="fc-color-picker">
+                            <li *ngFor="let item of coloresForm">
+                                <a class="text-{{item.name}} hoverBtnEx" (click)="asignColor(item)"><i class="fas fa-square"></i></a>
+                            </li>
+                        </ul>
+                    </div>
+                    <hr class="m-1" />
+                    <label>Escoge un icono: </label>
+                    <!--ICONOS-->
+                    <div class="btn-group" style="width: 100%; margin-bottom: 10px">
+                        <ul class="fc-color-picker">
+                            <li *ngFor="let item of iconosForm">
+                                <a (click)="asignIcon(item)"><span class="material-icons text-xl" [ngClass]="{'text-warning': item.selected, 'text-gray':!item.selected}" >{{item.icon}}</span></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer p-2">
+                <button type="button " class="btn btn-sm btn-danger" data-dismiss="modal" >Cancelar</button>
+                <button type="button " class="btn btn-sm btn-primary" (click)="agregarLista();" [disabled]="tituloLista=='' || tituloLista==undefined">Añadir</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /.Modal crear lista  -->
+<!-- Modal Agregar tarea -->
+<div class="modal fade" id="modalTareaNueva" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true" *ngIf="selectedLista!=undefined">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header {{selectedLista.bootstrapColor.class}} form-inline">
+                <div class="form-inline" style="font-size: 15px;"><i class="fa fa-tasks"></i>
+                    <b class="ml-2"> Nueva tarea</b>
+                </div>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="pl-2 pr-2">
+                    <div class="mb-2">
+                        <mat-form-field class="example-full-width" appearance="">
+                            <mat-label>Título</mat-label>
+                            <input matInput [(ngModel)]="tituloTarea"/>
+                        </mat-form-field>
+                    </div>
+                    <div class="form-group mb-2">
+                        <mat-form-field class="example-full-width" appearance="">
+                            <mat-label>Notas</mat-label>
+                            <textarea matInput [(ngModel)]="notas"></textarea>
+                        </mat-form-field>
+                    </div>
+                    <div class="form-group mb-2">
+                        <div class="row">
+                            <div class="col-11">
+                                <mat-form-field class="example-full-width" appearance="">
+                                    <mat-label>Subtareas</mat-label>
+                                    <input matInput [(ngModel)]="subtarea"/>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-1 text-left">
+                                <button class="btn pt-2 pl-0 pr-1 ml-0">
+                                    <i class="fas fa-plus-circle text-{{selectedLista.bootstrapColor.name}} fa-lg" (click)="AgreagarSubTarea(1)"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="row" *ngIf="listSubtarea.length>0">
+                            <div class="col-lg-12">
+                                <div class="table-responsive table-bordered table-responsive-lg table-responsive-md table-responsive-sm scrollerOsqi03">
+                                    <table class="table table-bordered table-hover table-sm small text-center" style="font-size: 11px;">
+                                        <tbody>
+                                            <tr class="{{selectedLista.bootstrapColor.class}} font-weight-bold">
+                                                <td>No.</td>
+                                                <td>Subtarea</td>
+                                                <th><i class="fas fa-trash-alt"></i></th>
+                                            </tr>
+                                            <ng-container *ngFor="let item of listSubtarea;  let i=index;">
+                                                <tr>
+                                                    <td>{{i+1}}</td>
+                                                    <th>{{item.titulo}}</th>
+                                                    <th class="text-danger"><i class="fas fa-trash-alt" (click)="deleteSubTarea(i,1)"></i></th>
+                                                </tr>
+                                            </ng-container>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-2">
+                        <i class="fa fa-calendar text-{{selectedLista.bootstrapColor.name}}" aria-hidden="true"></i> Fecha:
+                        <input class="form-control form-control-sm" type="date" id="start" name="trip-start"
+                        min="{{minDate}}" max="{{maxDate}}" [(ngModel)]="fecha"/>
+                    </div>
+                    <div class="mb-2">
+                        <i class="fas fa-clock text-{{selectedLista.bootstrapColor.name}}" aria-hidden="true"></i> Hora:
+                        <input class="form-control form-control-sm" type="time" id="appt" name="appt" min="09:00"
+                            max="18:00" required [(ngModel)]="hora"/>
+                    </div>
+                    <div class="mb-2">
+                        <div class="mb-2">
+                            <mat-form-field class="example-full-width" appearance="">
+                                <mat-label>Link de la ubicación</mat-label>
+                                <input matInput [(ngModel)]="ubicacion"/>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="text-info mb-2">
+                        <div class="btn btn-default bg-ligth btn-sm btn-file">
+                            <i class="fas fa-image text-{{selectedLista.bootstrapColor.name}}"></i> Subir imagen
+                            <input type="file" id="subirEvidenciaCalendario" name="attachment" (change)="seleccionarFoto($event,1)"/>
+                        </div>
+                    </div>
+                    <div class="mb-2">
+                        <div class="imgContainerModal">
+                            <ng-container *ngFor="let item of picturesAdded">
+                                <div class="borderImg ml-1 mr-1">
+                                    <img class="imgNuevaTarea" src="{{item}}">
+                                </div>
+                            </ng-container>
+                        </div>
+                    </div>
+                    <!--  <div><img class="w-25" src="/views/dist/img/carosul/1.png" alt=""></div> -->
+                </div>
+            </div>
+            <div class="modal-footer p-2">
+                <div *ngIf="erroresTareas.length>0" class="float-left text-danger text-sm">{{erroresTareas[0]}}</div>
+                <button type="button " class="btn btn-sm btn-danger" data-dismiss="modal" >Cancelar</button>
+                <button type="button" class="btn btn-sm btn-primary"  (click)="addEvento(1)">Añadir</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /.Modal Agregar tarea  -->
+<!-- Modal editar tarea  -->
+<div class="modal fade" id="exampleModal3" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true" *ngIf="selectedLista!=undefined && selectedEvento!=undefined">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header {{selectedLista.bootstrapColor.class}} form-inline">
+                <div class="form-inline" style="font-size: 15px;"><i class="fa fa-edit"></i>
+                    <b class="ml-2"> Editar tarea</b>
+                </div>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+            </div>
+            <div class="modal-body">
+                <div class="pl-2 pr-2">
+                    <div class="mb-2">
+                        <i class="fas fa-book text-{{selectedLista.bootstrapColor.name}}" aria-hidden="true"></i> Titulo
+                        <input type="text" class="form-control form-control-sm" [(ngModel)]="tituloTarea" placeholder="Titulo" />
+                    </div>
+                    <div class="form-group mb-2">
+                        <i class="fas fa-bookmark text-{{selectedLista.bootstrapColor.name}}" aria-hidden="true"></i> Notas
+                        <textarea class="form-control" style="height: 100px; font-size:15px;" placeholder="Notas" rows="2" [(ngModel)]="notas"></textarea>
+                    </div>
+                    <div class="form-group mb-2">
+                        <div class="row">
+                            <div class="col-11">
+                                <input type="text" class="form-control form-control-sm"
+                                    placeholder="Subtareas" [(ngModel)]="subtarea" />
+                            </div>
+                            <div class="col-1 text-center">
+                                <button class="btn pt-2 pl-0 pr-1 ml-0">
+                                    <i class="fas fa-plus-circle text-{{selectedLista.bootstrapColor.name}} fa-lg" (click)="AgreagarSubTarea(2)"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="row" *ngIf="selectedEvento.secSubtareas.length>0">
+                            <div class="col-lg-12">
+                                <div class="table-responsive table-bordered table-responsive-lg table-responsive-md table-responsive-sm scrollerOsqi03">
+                                    <table class="table table-bordered table-hover table-sm small text-center" style="font-size: 11px;">
+                                        <tbody>
+                                            <tr class="{{selectedLista.bootstrapColor.class}} font-weight-bold">
+                                                <td>No.</td>
+                                                <td>Subtarea</td>
+                                                <th><i class="fas fa-trash-alt"></i></th>
+                                            </tr>
+                                            <ng-container *ngFor="let item of selectedEvento.secSubtareas;  let i=index;">
+                                                <tr>
+                                                    <td>{{i+1}}</td>
+                                                    <th>{{item.titulo}}</th>
+                                                    <th class="text-danger"><i class="fas fa-trash-alt" (click)="deleteSubTarea(i,2)"></i></th>
+                                                </tr>
+                                            </ng-container>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <div class="mb-2">
+                        <i class="fas fa-calendar-alt text-{{selectedLista.bootstrapColor.name}}"></i> Fecha
+                        <input class="form-control form-control-sm" t type="date" id="start" name="trip-start"
+                             [(ngModel)]="fecha" min="{{minDate}}" max="{{maxDate}}" />
+                    </div>
+                    <div class="mb-2">
+                        <i class="fas fa-clock text-{{selectedLista.bootstrapColor.name}}" aria-hidden="true"></i> Hora
+                        <input class="form-control form-control-sm" type="time" id="appt" name="appt" min="09:00"
+                            max="18:00" [(ngModel)]="hora" required />
+                    </div>
+                    <div class="mb-2">
+                        <i class="fas fa-map-marker-alt text-{{selectedLista.bootstrapColor.name}}" aria-hidden="true"></i> Ubicación Maps
+                        <input type="text" class="form-control form-control-sm" 
+                            placeholder="Link de la ubicación" [(ngModel)]="ubicacion" />
+                    </div>
+    
+                    <div class="text-info mb-2">
+                        <div class="btn btn-default bg-ligth btn-sm btn-file">
+                            <i class="fas fa-image text-{{selectedLista.bootstrapColor.name}}"></i> Subir imagen
+                            <input type="file" id="subirEvidenciaCalendarioEditar" name="attachment" (change)="seleccionarFoto($event,2)"/>
+                        </div>
+                    </div>
+                    <div class="imgContainerModal">
+                        <ng-container *ngFor="let item of selectedEvento.lstImgEventoCalendario">
+                            <div class="borderImg ml-1 mr-1">
+                                <img class="imgNuevaTarea" src="{{endUrlBack}}{{item.url}}">
+                            </div>
+                        </ng-container>
+                        <ng-container *ngFor="let item of picturesAdded">
+                            <div class="borderImg ml-1 mr-1">
+                                <img class="imgNuevaTarea" src="{{item}}">
+                            </div>
+                        </ng-container>
+                    </div>
+                </div>
+
+                
+                <!--  <div><img class="w-25" src="/views/dist/img/carosul/1.png" alt=""></div> -->
+                
+            </div>
+            <div class="modal-footer p-2">
+                <button type="button " class="btn btn-sm btn-danger" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-sm btn-primary" (click)="editarEvento()">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /.editar tarea  -->
+<!-- /.Modal Contenido de una tarea -->
+<div class="modal fade bd-example-modal-lg" id="modalInfoEvento" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+    aria-hidden="true" *ngIf="selectedLista!=undefined && selectedEvento!=undefined">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header {{selectedLista.bootstrapColor.class}} form-inline">
+                <div class="form-inline" style="font-size: 15px;"><i class="fa fa-edit"></i>
+                    <b class="ml-2 mr-1"> {{selectedLista.titulo}} </b>
+                </div>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+            </div>
+            <div class="modal-body" *ngIf="!cargandoModal">
+                <div class="pl-2 pr-2">
+                    <div class="col-12">
+                        <div class="row">
+                            <div class="col-6 mb-2" type="button">
+                                <span class="float-left material-icons {{selectedLista.bootstrapColor.class}}" style="
+                                border-radius: 50%;
+                                font-size: 35px;
+                                line-height: 50px;
+                                text-align: center;
+                                top: 0;
+                                width: 50px;">
+                                    {{selectedLista.icono}}
+                                </span>
+                                <!--
+                                    <i class="fas fa-user bg-danger" >
+                                </i>
+                                -->
+                                <span class="float-left pt-3 pl-2 font-weight-bold">{{selectedEvento.titulo}}</span>
+                            </div>
+                            <div class="col-6 pt-3 text-right">
+                                <span class="mr-3">
+                                    <i class="fa fa-calendar text-{{selectedLista.bootstrapColor.name}}"></i> Fecha: <b>{{selectedEvento.hora | date:"dd/MM/yy"}}</b>
+                                </span>
+                                <span><i class="fa fa-clock text-{{selectedLista.bootstrapColor.name}}"></i> Hora: <b>{{selectedEvento.hora | date:"HH:mm"}}</b></span>
+                            </div>
+    
+                            <div class="col-12 card pt-2 bg-light">
+                                <label class="text-{{selectedLista.bootstrapColor.name}}">Notas:</label>
+                                <div>
+                                    {{selectedEvento.notas}}
+                                </div>
+                            </div>
+                            <div class="col-12 card pt-2 bg-light" *ngIf="selectedEvento.lstSubTareaCalendario.length>0">
+                                <label class="text-{{selectedLista.bootstrapColor.name}}">Subtareas: <i class="fa fa-spinner fa-spin text-{{selectedLista.bootstrapColor.name}}" *ngIf="selectedEvento.timerEventoCalendario!=0"></i></label>
+                                <div class="pb-2" *ngFor="let item of selectedEvento.lstSubTareaCalendario">
+                                    <input type="checkbox" (change)="cambioEstatusSubTarea(selectedEvento)" [(ngModel)]="item.estatus"/>
+                                    <span class="pl-3"> {{item.titulo}}</span>
+                                </div>
+                            </div>
+    
+                            <div class="col-12 text-center m-3">
+                                <label class="text-{{selectedLista.bootstrapColor.name}}">Ubicación:</label>
+    
+                                <a >{{selectedEvento.ubicacion}}</a>
+                            </div>
+    
+                            <div class="col-12 text-center imgContainerModalInfo">
+                                <ng-container *ngFor="let item of selectedEvento.lstImgEventoCalendario">
+                                    <div class="borderImgToModal ml-3">
+                                        <img class="imgModalTarea" src="{{endUrlBack}}{{item.url}}" alt="" />
+                                    </div>
+                                </ng-container>
+                                <!--
+                                <div class="borderImgToModal ml-3" >
+                                    <i class="fas fa-camera fa-7x text-navy" ></i>
+                                </div>
+                                -->
+                            </div>
+                            <div class="col-12 text-center mt-5">
+                                <mat-slide-toggle [checked]="selectedEvento.estatus" (change)="cambioEstatusEvento(selectedLista,selectedEvento)" [(ngModel)]="selectedEvento.estatus">Terminada!</mat-slide-toggle>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 pt-3" *ngIf="cargandoModal">
+                <section class="text-center">
+                    <div>
+                        <div class="spinner-grow text-primary" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                        <div class="spinner-grow text-primary" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                        <div class="spinner-grow text-primary" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                        <div class="spinner-grow text-primary" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                        <div class="spinner-grow text-primary" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                        <div class="spinner-grow text-primary" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                    </div>
+                    <span class="text-primary h5">Cargando...</span>
+                </section>
+            </div>
+            <div class="modal-footer p-1">
+                <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal">Listo</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /.Modal Contenido de una tarea   -->
+
+<!-- Modal Agregar SIN LISTA-->
+<div class="modal fade" id="modalSinLista" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-navy form-inline">
+                <div class="form-inline" style="font-size: 15px;"><i class="fa fa-tasks"></i>
+                    <b class="ml-2">Agregar tarea</b>
+                </div>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+            <div class="modal-body">
+                <div class="pl-2 pr-2">
+                    <div class="pb-2">
+                        <select class="form-control" (input)="selectListaModal($event.target.value)">
+                            <option [selected]="listaSelectedFromCalendar=='0' || listaSelectedFromCalendar==undefined " value="0">Seleccione una lista...</option>
+                            <option *ngFor="let item of listCalendario" value="{{item.id}}">{{item.titulo}}</option>
+                        </select>
+                    </div>
+                    <div class="mb-2">
+                        <mat-form-field class="example-full-width" appearance="">
+                            <mat-label>Título</mat-label>
+                            <input matInput [(ngModel)]="tituloTarea"/>
+                        </mat-form-field>
+                    </div>
+                    <div class="form-group mb-2">
+                        <mat-form-field class="example-full-width" appearance="">
+                            <mat-label>Notas</mat-label>
+                            <textarea matInput [(ngModel)]="notas"></textarea>
+                        </mat-form-field>
+                    </div>
+                    <div class="form-group mb-2">
+                        <div class="row">
+                            <div class="col-11">
+                                <mat-form-field class="example-full-width" appearance="">
+                                    <mat-label>Subtareas</mat-label>
+                                    <input matInput [(ngModel)]="subtarea"/>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-1 text-left">
+                                <button class="btn pt-2 pl-0 pr-1 ml-0">
+                                    <i class="fas fa-plus-circle text-navy fa-lg" (click)="AgreagarSubTarea(1)"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="row" *ngIf="listSubtarea.length>0">
+                            <div class="col-lg-12">
+                                <div class="table-responsive table-bordered table-responsive-lg table-responsive-md table-responsive-sm scrollerOsqi03">
+                                    <table class="table table-bordered table-hover table-sm small text-center" style="font-size: 11px;">
+                                        <tbody>
+                                            <tr class="bg-navy font-weight-bold">
+                                                <td>No.</td>
+                                                <td>Subtarea</td>
+                                                <th><i class="fas fa-trash-alt"></i></th>
+                                            </tr>
+                                            <ng-container *ngFor="let item of listSubtarea;  let i=index;">
+                                                <tr>
+                                                    <td>{{i+1}}</td>
+                                                    <th>{{item.titulo}}</th>
+                                                    <th class="text-danger"><i class="fas fa-trash-alt" (click)="deleteSubTarea(i,1)"></i></th>
+                                                </tr>
+                                            </ng-container>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-2">
+                        <i class="fa fa-calendar text-primary" aria-hidden="true"></i> Fecha:
+                        <input class="form-control form-control-sm" type="date" id="start" name="trip-start"
+                        min="{{minDate}}" max="{{maxDate}}" [(ngModel)]="fecha"/>
+                    </div>
+                    <div class="mb-2">
+                        <i class="fas fa-clock text-primary" aria-hidden="true"></i> Hora:
+                        <input class="form-control form-control-sm" type="time" id="appt" name="appt" min="09:00"
+                            max="18:00" required [(ngModel)]="hora"/>
+                    </div>
+                    <div class="mb-2">
+                        <div class="mb-2">
+                            <mat-form-field class="example-full-width" appearance="">
+                                <mat-label>Link de la ubicación</mat-label>
+                                <input matInput [(ngModel)]="ubicacion"/>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="text-info mb-2">
+                        <div class="btn btn-default bg-ligth btn-sm btn-file">
+                            <i class="fas fa-image text-primary"></i> Subir imagen
+                            <input type="file" id="subirEvidenciaCalendarioFromCalendar" name="attachment" (change)="seleccionarFoto($event,1)"/>
+                        </div>
+                    </div>
+                    <div class="imgContainerModal">
+                        <ng-container *ngFor="let item of picturesAdded">
+                            <div class="borderImg ml-1 mr-1">
+                                <img class="imgNuevaTarea" src="{{item}}">
+                            </div>
+                        </ng-container>
+                    </div>
+                    <!--  <div><img class="w-25" src="/views/dist/img/carosul/1.png" alt=""></div> -->
+                   
+                </div>
+            </div>
+            <div class="modal-footer p-2">
+                <div *ngIf="erroresTareas.length>0" class="float-left text-danger text-sm">{{erroresTareas[0]}}</div>
+                <button type="button " class="btn btn-sm btn-danger" data-dismiss="modal" >Cancelar</button>
+                <button type="button" class="btn btn-sm btn-primary" (click)="addEvento(2)">Añadir</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /.Modal Agregar tarea  -->
+
+<!-- /.Modal  Mensaje programado WhatsApp -->
+<div class="modal fade bd-example-modal-lg" tabindex="-1" id="modalMensajesWhatsApp" role="dialog"
+    aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header  bg-danger">
+                <div class="form-inline" style="font-size: 15px;">
+                    <i class="fab fa-whatsapp fa-lg"></i> <b class="ml-2">Mensajes programados</b>
+                </div>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row float-right">
+                    <span class="mr-3"> <i class="fa fa-calendar text-primary"></i> <b> Fecha:</b> {{ selectedDateFromModalWhatsApp | date:"dd/MM/yy"  }} </span>
+                </div>
+                <br>
+                <div class="pl-1 pr-1">
+                    <ng-container *ngFor="let item of selectedWhatsPCartera; let i=index;">
+                        <ng-container *ngIf="item.msjWhats.length>0">
+                            <div class="row">
+                                <div class="col-6"> <label for=""><b>Mensaje para:</b><span class="text-primary"> {{item.expositor.nombre_comercial}}</span></label></div>
+                            </div>
+                            <div class="card fondo text-right p-3">
+                                
+                                    <div class=" message-body"  *ngFor="let mensaje of item.msjWhats">
+                                        <div class="col-sm-12 message-main-sender">
+                                            <div class="sender">
+                                                <div *ngIf="mensaje.tipo==1">
+                                                    {{mensaje.descripcion}}
+                                                </div>
+                                                <div *ngIf="mensaje.tipo==0">
+                                                    <div class="card mt-1 mb-1 p-1">
+                                                        <div class="card-body p-2">
+                                                            <div class="row">
+                                                                <div class="col-2">
+                                                                    <img src="./assets/sms/img/pdf.png"
+                                                                        style="width: 25px; height: 35px;" alt="">
+                                                                </div>
+                                                                <div class="col-10 suspensivos" style="font-size: 9px;">
+                                                                    {{mensaje.descripcion}} <i
+                                                                        class="fas fa-paperclip"></i>
+                                                                    <div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <span class="time text-secondary" style="font-size: 10px;"><i class="fas fa-clock"></i> {{ mensaje.fechaProgramado | date: "HH:mm" }}</span>
+                                            </div>
+                                            </div>
+                                    </div>
+                                    <!--
+                                <div class=" message-body">
+                                    <div class="col-sm-12 message-main-sender">
+                                        <div style="width: auto !important;">
+                                            <button type="button" class="btn btn-sm btn-info ">
+                                                Ir a mensajes
+                                                <i class="fas fa-share"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                -->
+                            </div>
+                        </ng-container>
+                    </ng-container>
+
+                    <!--WhatsContacto-->
+                    <ng-container *ngFor="let item of selectedWhatsPContacto">
+                        <ng-container *ngIf="item.msjWhats.length>0">
+                            <div class="row">
+                                <div class="col-6"> <label for=""><b>Mensaje para:</b><span class="text-primary"> {{item.nombre}} <label class="text-dark">de</label> {{item.expositor.nombre_comercial}}</span></label></div>
+                            </div>
+                            <div class="card fondo text-right p-3">
+                                <div class=" message-body" *ngFor="let mensaje of item.msjWhats">
+                                    <div class="col-sm-12 message-main-sender">
+                                        <div class="sender">
+                                            <div *ngIf="mensaje.tipo==1">
+                                                {{mensaje.descripcion}}
+                                            </div>
+                                            <div *ngIf="mensaje.tipo==0">
+                                                <div class="card mt-1 mb-1 p-1">
+                                                    <div class="card-body p-2">
+                                                        <div class="row">
+                                                            <div class="col-2">
+                                                                <img src="./assets/sms/img/pdf.png"
+                                                                    style="width: 25px; height: 35px;" alt="">
+                                                            </div>
+                                                            <div class="col-10 " style="font-size: 9px;">
+                                                                {{mensaje.descripcion}} <i
+                                                                    class="fas fa-paperclip"></i>
+                                                                <div>
+                                                                    <span class="">
+                                                                        <b>1,245 KB</b></span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <span class="time text-secondary" style="font-size: 10px;"><i class="fas fa-clock"></i> {{ mensaje.fecha_programado | date: "HH:mm" }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--
+                                <div class=" message-body">
+                                    <div class="col-sm-12 message-main-sender">
+                                        <div style="width: auto !important;">
+                                            <button type="button" class="btn btn-sm btn-info ">
+                                                Ir a mensajes
+                                                <i class="fas fa-share"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                -->
+                            </div>
+                            
+                        </ng-container>
+                    </ng-container>
+                </div>
+            </div>
+            <div class="modal-footer p-1 bg-light">
+                <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal" >Cerrar</button>
+            </div>
+        </div>
+    </div>
+<!-- /.Modal  Mensaje programado WhatsApp -->
+
+
+<!-- Modal E-mail programado-->
+<div class="modal fade">
+    <div class="card bg-light scrolCorreo" style="height: 580px;">
+        <div class="card-body " style="font-size: 10px;">
+            <div>
+                <font class="text-dark text-lg"><b> Conoce la nueva Expo Farma 2021
+                    </b></font>
+            </div>
+            <div>
+                <font class="text-primary">Vier 17/02/21 1:30 PM</font>
+            </div>
+            <div>
+                <font class="text-dark">Para: <b>Alpamer S.A de C.V.</b></font>
+            </div>
+            <div>
+                <font class="text-dark">CC:<u> rene.carvajal@naibgroup.com </u>
+                </font>
+            </div>
+            <hr class="mb-1">
+            <div class=" row bg-light">
+                <!-----------CARDS DE PDF---------------->
+                <div class="col-lg-4 col-md-4 col-sm-12  ">
+                    <div class="card mt-1 mb-1 p-0">
+                        <div class="card-body p-2">
+                            <div class="row">
+                                <div class="col-2">
+                                    <img src="./assets/sms/img/pdf.png"
+                                        style="width: 25px; height: 35px;" alt="">
+                                </div>
+                                <div class="col-9 " style="font-size: 9px;">
+                                    Comprobantedepago.pdf <i
+                                        class="fas fa-paperclip"></i>
+                                    <div>
+                                        <span class="">
+                                            <b>1,245 KB</b></span>
+                                    </div>
+                                </div>
+                                <div class="col-1 pl-1">
+                                    <div> <i class="fa fa-download"></i></div>
+                                    <div> <i class="fas fa-trash-alt"></i> </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-----------./FIN CARDS DE PDF---------------->
+            <hr class="mb-1 pt-1">
+            <div class="" style="font-size: 10px;">
+                <h6>Estimado Omar // Evelyn:</h6>
+                <p>Antes que nada espero se encuentre excelentemente bien de salud
+                    los dos.
+                    <br>
+                    <br>
+                    De acuerdo ala conversación telefónica que tan amablemente
+                    sostuve con la Sta. Evelyn,
+                    re-envío este correo ya que por algún motivo no he podido tener
+                    suerte en comunicarme con
+                    usted para ofrecerle la promoción que estamos haciendo dada la
+                    pandemia a los ex clientes
+                    que trabajaron con nosotros para algún evento internacional. 
+                    <br> 
+                    nuestra intención es que conozcan nuestro servicio y nos tengan
+                    considerados como una
+                    opción de envío fácil y segura. En estos tiempos de Pandemia, lo
+                    importante es apoyarnos
+                    mutuamente y eso queremos; poner a su disposición los recursos
+                    de nuestra empresa a
+                    precios muy accesibles pero con el excelente servicio que desde
+                    hace mas de 20 años nos ha
+                    caracterizado.
+                </p>
+                <p>Antes que nada espero se encuentre excelentemente bien de salud
+                    los dos.
+                    <br>
+                    <br>
+    
+                    De acuerdo ala conversación telefónica que tan amablemente
+                    sostuve con la Sta. Evelyn,
+                    re-envío este correo ya que por algún motivo no he podido tener
+                    suerte en comunicarme con
+                    usted para ofrecerle la promoción que estamos haciendo dada la
+                    pandemia a los ex clientes
+                    que trabajaron con nosotros para algún evento internacional. 
+                    <br> 
+                    nuestra intención es que conozcan nuestro servicio y nos tengan
+                    considerados como una
+                    opción de envío fácil y segura. En estos tiempos de Pandemia, lo
+                    importante es apoyarnos
+                    mutuamente y eso queremos; poner a su disposición los recursos
+                    de nuestra empresa a
+                    precios muy accesibles pero con el excelente servicio que desde
+                    hace mas de 20 años nos ha
+                    caracterizado.
+                </p>
+                <p>Antes que nada espero se encuentre excelentemente bien de salud
+                    los dos.
+                    <br>
+                    <br>
+    
+                    De acuerdo ala conversación telefónica que tan amablemente
+                    sostuve con la Sta. Evelyn,
+                    re-envío este correo ya que por algún motivo no he podido tener
+                    suerte en comunicarme con
+                    usted para ofrecerle la promoción que estamos haciendo dada la
+                    pandemia a los ex clientes
+                    que trabajaron con nosotros para algún evento internacional. 
+                    <br> 
+                    nuestra intención es que conozcan nuestro servicio y nos tengan
+                    considerados como una
+                    opción de envío fácil y segura. En estos tiempos de Pandemia, lo
+                    importante es apoyarnos
+                    mutuamente y eso queremos; poner a su disposición los recursos
+                    de nuestra empresa a
+                    precios muy accesibles pero con el excelente servicio que desde
+                    hace mas de 20 años nos ha
+                    caracterizado.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Fin Modal E-mail programado-->
